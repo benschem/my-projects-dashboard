@@ -10,10 +10,10 @@
 [X] bundle install
 [X] Folder structure
 [X] README
-[ ] Create Sinatra app (app.rb)
-[ ] Mount from config.ru
-[ ] Implement Basic Auth middleware
-[ ] Store credentials in .env
+[X] Create Sinatra app (app.rb)
+[X] Mount from config.ru
+[X] Implement Basic Auth middleware
+[X] Store credentials in .env
 
 ### Data
 
