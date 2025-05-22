@@ -7,8 +7,8 @@ gem 'rack'
 gem 'sinatra'
 
 gem 'dotenv'
-gem 'httpx'
 gem 'json'
+gem 'octokit'
 
 group :development do
   gem 'debug', require: false

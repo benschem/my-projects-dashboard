@@ -17,9 +17,10 @@
 
 ### Data
 
-[ ] Setup access for GitHub API
-[ ] Decide what data exactly to pull
-[ ] Write JSON caching script
+[X] Setup access for GitHub API
+[X] Decide what data exactly to pull
+[X] Write a script to fetch the repo data
+[X] Write a Rake task to manually fetch the data
 
 ### Views and UI
 
