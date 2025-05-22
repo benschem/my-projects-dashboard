@@ -3,8 +3,20 @@
 require 'sinatra/base'
 require 'json'
 
+require_relative 'config/logger_setup'
+
 # MY PROJECTS DASHBOARD
 class MyProjectsDashboard < Sinatra::Base
+  configure do
+    set :logger, LoggerSetup.build(environment)
+  end
+
+  helpers do
+    def logger
+      settings.logger
+    end
+  end
+
   # TODO: Some kind of cache system so this can be updated without restarting
   REPO_DATA = JSON.parse(File.read('data/repos.json'), symbolize_names: true)
 

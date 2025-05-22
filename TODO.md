@@ -34,9 +34,8 @@
 [ ] Set up reverse proxy so NGINX forwards to localhost:9292
 [ ] Use systemd service to run bundle exec rackup
 [ ] Configure ENV vars
-[ ] Add logging
-[ ] Use Logger class or just puts + timestamps
-[ ] Log to file if needed
+[X] Add logging
+[X] Log to file in production
 
 ## Polish
 
