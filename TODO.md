@@ -24,8 +24,10 @@
 
 ### Views and UI
 
-[ ] Index page
-[ ] Show page
+[X] Index page
+[ ] Nice styling
+[ ] Filter
+[ ] Search
 
 ## Deployment
 
@@ -44,6 +46,7 @@
 
 ## Stretch Goals
 
+[ ] Add project meta data that saves to separate JSON - use ids to link them
 [ ] Tag repos by status (WIP, Complete, Archive)
 [ ] Show git commit graph with git log --graph
 [ ] Track last personal commit (vs contributions)
