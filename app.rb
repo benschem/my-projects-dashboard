@@ -9,8 +9,6 @@ require_relative 'projects/project_repository'
 
 # MY PROJECTS DASHBOARD
 class MyProjectsDashboard < Sinatra::Base
-  PROJECTS = ProjectRepository.new('data/repos.json')
-
   configure do
     set :logger, LoggerSetup.build(settings.environment)
   end
@@ -20,6 +18,8 @@ class MyProjectsDashboard < Sinatra::Base
       settings.logger
     end
   end
+
+  PROJECTS = ProjectRepository.new(logger: settings.logger)
 
   get '/' do
     @projects = PROJECTS.all

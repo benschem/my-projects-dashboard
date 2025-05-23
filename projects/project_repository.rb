@@ -1,15 +1,19 @@
 # frozen_string_literal: true
 
+require 'logger'
 require_relative 'project'
 
 # Project
 class ProjectRepository
-  def initialize(repo_file)
-    @repo_file = repo_file
-    @metadata_file = 'data/metadata.json'
+  attr_reader :logger
+
+  def initialize(attributes)
+    @repos_file = attributes[:repos_file] || ENV['REPOS_FILE']
+    @metadata_file = attributes[:metadata_file] || ENV['REPOS_METADATA_FILE']
+    @logger = attributes[:logger] || Logger.new($stdout)
     @projects = []
     @next_id = 1
-    load_projects if File.exist?(@repo_file)
+    load_projects if File.exist?(@repos_file)
   end
 
   def all
@@ -41,17 +45,38 @@ class ProjectRepository
 
   def load_projects
     # TODO: Some kind of cache system so this can be updated without restarting
-    repos = JSON.parse(File.read(@repo_file), symbolize_names: true)
-    metadata = JSON.parse(File.read(@metadata_file), symbolize_names: true) if File.exist?(@metadata_file)
-    repos.each_with_index do |repo, index|
-      repo[:id] = metadata ? metadata[index][:id] : @next_id
-      repo[:status] = metadata ? metadata[index][:status] : nil
-      repo[:urgency] = metadata ? metadata[index][:urgency] : nil
-      repo[:type] = metadata ? metadata[index][:type] : nil
-      @projects << Project.new(repo)
-      @next_id += 1
+    repos = parse_json(@repos_file)
+    repos_metadata = File.exist?(@metadata_file) ? parse_json(@metadata_file) : []
+
+    repos.each do |repo|
+      project_metadata = find_metadata(repo, repos_metadata)
+      project = build_project(repo, project_metadata)
+      @projects << project
     end
+
     save_metadata unless File.exist?(@metadata_file)
+  end
+
+  def parse_json(file)
+    JSON.parse(File.read(file), symbolize_names: true)
+  end
+
+  def build_project(repo, metadata)
+    repo[:id] = @next_id
+    repo[:status] = metadata&.dig(:status)
+    repo[:urgency] = metadata&.dig(:urgency)
+    repo[:type] = metadata&.dig(:type)
+
+    @next_id += 1
+
+    Project.new(repo)
+  end
+
+  def find_metadata(repo, repos_metadata)
+    metadata = repos_metadata.find { |metadata| metadata[:full_name] == repo[:full_name] }
+    logger.error "Unable to find metadata for #{repo[:full_name]}" if metadata.nil?
+
+    metadata
   end
 
   def save_metadata
