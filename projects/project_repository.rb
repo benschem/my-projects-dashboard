@@ -13,18 +13,27 @@ class ProjectRepository
   end
 
   def all
+    logger.error('Unable to retrieve projects') if @projects.empty?
+
     @projects
   end
 
   def find(id)
-    @projects.find { |element| element.id == id }
+    project = @projects.find { |project| project.id == id }
+    logger.error "Unable to find Project with id: #{id}" if project.nil?
+
+    project
   end
 
-  def update(project)
-    project = find(project.id)
-    project.status = project[:status]
-    project.urgency = project[:urgency]
-    project.type = project[:type]
+  def update(attributes)
+    project = find(attributes[:id])
+    logger.error "Unable to update Project with id: #{attributes[:id]}" if project.nil?
+    return unless project
+
+    project.status = attributes[:status]
+    project.urgency = attributes[:urgency]
+    project.type = attributes[:type]
+
     save_metadata
   end
 
