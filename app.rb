@@ -4,9 +4,13 @@ require 'sinatra/base'
 require 'json'
 
 require_relative 'config/logger_setup'
+require_relative 'lib/github_client'
+require_relative 'projects/project_repository'
 
 # MY PROJECTS DASHBOARD
 class MyProjectsDashboard < Sinatra::Base
+  PROJECTS = ProjectRepository.new('data/repos.json')
+
   configure do
     set :logger, LoggerSetup.build(settings.environment)
   end
@@ -17,11 +21,8 @@ class MyProjectsDashboard < Sinatra::Base
     end
   end
 
-  # TODO: Some kind of cache system so this can be updated without restarting
-  REPO_DATA = JSON.parse(File.read('data/repos.json'), symbolize_names: true)
-
   get '/' do
-    @repos = REPO_DATA
+    @projects = PROJECTS.all
     erb :index
   end
 

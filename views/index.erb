@@ -1,31 +1,21 @@
 <h1>My Projects</h1>
 
-<% @repos.each do |repo| %>
-  <div>
-    <h2><%= repo[:name] %></h2>
-    <p><%= repo[:owner] %></p>
-    <a href="<%= repo[:url] %>" target="_blank"><%= repo[:url] %></a>
-    <p><%= repo[:private] ? 'Private' : 'Public' %></p>
-    <p><%= repo[:description] %></p>
+<% @projects.each do |project| %>
+  <article style="display: flex; gap:2rem;">
+    <div>
+      <strong><%= project.name %></strong>
+      <p><%= project.description %></p>
+      <a href="<%= project.url %>" target="_blank">View on Github</a>
+    </div>
+    <div>
+      <p><%= project.status %></p>
+      <p><%= project.type %></p>
+      <p><%= project.urgency %></p>
+    </div>
     <ul>
-      <% repo[:collaborators]&.each do |collaborator| %>
-        <li><%= collaborator %></li>
-      <% end %>
-    </ul>
-    <ul>
-      <% repo[:languages]&.each do |language| %>
+      <% project.languages&.each do |language| %>
         <li><%= language %></li>
       <% end %>
     </ul>
-    <ul>
-      <% repo[:branches]&.each do |branche| %>
-        <li><%= branche %></li>
-      <% end %>
-    </ul>
-    <ul>
-      <% repo[:commits]&.each do |commit| %>
-        <li><%= commit %></li>
-      <% end %>
-    </ul>
-  </div>
+  </article>
 <% end %>
