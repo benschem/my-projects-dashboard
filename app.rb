@@ -8,7 +8,7 @@ require_relative 'config/logger_setup'
 # MY PROJECTS DASHBOARD
 class MyProjectsDashboard < Sinatra::Base
   configure do
-    set :logger, LoggerSetup.build(environment)
+    set :logger, LoggerSetup.build(settings.environment)
   end
 
   helpers do
