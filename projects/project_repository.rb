@@ -7,7 +7,7 @@ require_relative 'project'
 class ProjectRepository
   attr_reader :logger
 
-  def initialize(attributes)
+  def initialize(attributes = {})
     @repos_file = attributes[:repos_file] || ENV['REPOS_FILE']
     @metadata_file = attributes[:metadata_file] || ENV['REPOS_METADATA_FILE']
     @logger = attributes[:logger] || Logger.new($stdout)

@@ -30,9 +30,9 @@ class MyProjectsDashboard < Sinatra::Base
   end
 
   post '/refresh' do
-    system('ruby scripts/refresh.rb &')
-    # Terminating a command with & means the shell executes the command asynchronously.
-    # As in - do not wait for the command to finish before executing the next command.
-    status 202
+    GithubClient.new(logger: settings.logger).fetch_repos_and_write_to_file
+    settings.project_repository = ProjectRepository.new(logger: settings.logger)
+
+    redirect '/', 303 # See Other
   end
 end
