@@ -33,20 +33,17 @@
 
 [ ] Set up reverse proxy so NGINX forwards to localhost:9292
 [ ] Use systemd service to run bundle exec rackup
-[ ] Configure ENV vars
+[X] Configure ENV vars
 [X] Add logging
 [X] Log to file in production
 
 ## Polish
 
-[ ] Add error handling
-[ ] If API rate limit hit or invalid response, log and skip
-[ ] Ensure missing data doesn’t break UI
+[X] Add error handling
+[X] If API rate limit hit or invalid response, log and skip
+[X] Ensure missing data doesn’t break UI
 
 ## Stretch Goals
 
-[ ] Add project meta data that saves to separate JSON - use ids to link them
-[ ] Tag repos by status (WIP, Complete, Archive)
-[ ] Show git commit graph with git log --graph
-[ ] Track last personal commit (vs contributions)
-[ ] Build a CLI to open projects locally
+[X] Add project meta data that saves to separate JSON - use ids to link them
+[X] Tag repos by status (WIP, Complete, Archive)
