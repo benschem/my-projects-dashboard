@@ -1,20 +1,30 @@
 <h1>My Projects</h1>
 
 <% @projects.each do |project| %>
-  <article style="display: flex; gap:2rem;">
-    <div>
-      <strong><%= project.name %></strong>
-      <p><%= project.description %></p>
-      <a href="<%= project.url %>" target="_blank">View on Github</a>
+  <article>
+    <div class="badge" data-urgency="<%= project.urgency %>">
+      <%= project.urgency %> priority
     </div>
-    <div>
-      <p><%= project.status %></p>
-      <p><%= project.type %></p>
-      <p><%= project.urgency %></p>
-    </div>
+
+      <div>
+        <h2><%= project.name %></h2>
+        <p><%= project.description %></p>
+        <a href="<%= project.url %>" target="_blank">View on Github</a>
+      </div>
+
+      <div>
+        <p><strong>Created:</strong> <%= Time.new(project.created_at).strftime('%B %Y') %></p>
+        <p><strong>Last pushed:</strong> <%= project.pushed_ago %> <%= project.pushed_ago == 1 ? 'day' : 'days' %> ago</p>
+      </div>
+
+      <div>
+        <p><strong>Status</strong>: <%= project.status %></p>
+        <p><strong>Type:</strong> <%= project.type %></p>
+      </div >
+
     <ul>
-      <% project.languages&.each do |language| %>
-        <li><%= language %></li>
+      <% project.languages.first(3)&.each do |language| %>
+        <li><strong><%= language[0] %>:</strong> <%= (language[1].fdiv(project.total_lines) * 100).round %>%</li>
       <% end %>
     </ul>
   </article>

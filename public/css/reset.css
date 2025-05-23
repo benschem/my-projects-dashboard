@@ -1,0 +1,168 @@
+/*
+*
+******************************
+*  BEN SCHEMBRI'S CSS RESET  *
+******************************
+*
+*  Last updated: Nov 2023
+*
+*  TABLE OF CONTENTS
+*
+*  1. Use a more-intuitive box-sizing model
+*  2. Remove browser default margin
+*  3. Fix text resizing in landscape on mobile Safari and Firefox
+*  4. Apply smooth scrolling
+*  5. Make sure the page is at least as big as the screen
+*  6. Fix potential text overflow issue
+*  7. Display images etc in a more intuitive way
+*  8. Make form controls inherit typographical styles from their parents
+*  9. Remove default list styling
+*  10. If a user doesn't want motion, they won't get it
+*/
+
+/*
+***********************************************
+*  1. Use a more-intuitive box-sizing model   *
+***********************************************
+    - default is content-box
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+**************************************
+*  2. Remove browser default margin  *
+**************************************
+    - default adds extra margin to h1 etc
+*/
+* {
+  margin: 0;
+}
+
+/*
+********************************************************************
+*  3. Fix text resizing in landscape on mobile Safari and Firefox  *
+********************************************************************
+*/
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/*
+********************************
+*  4. Apply smooth scrolling.  *
+********************************
+    - usually :focus-within means search jumps quickly instead
+*/
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/*
+********************************************************
+*  5. Make sure page is at least as big as the screen  *
+********************************************************
+    - VH as backup in case browser does not support SVH
+    - SVH instead of DVH so it isn't janky
+    - default line-height is 1.2 => Web Content Accessibility Guidelines
+      state that line-height for body text should be at least 1.5
+    - Better font smoothing on webkit browsers
+    - 1.5 line-height is a bit much for headings, make it 1.2
+*/
+body {
+  min-height: 100vh;
+  min-height: 100svh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+/*
+******************************************
+*  6. Fix potential text overflow issue  *
+******************************************
+    - Default is to softwrap, but if a line doesn't have any softwrap
+      opportunities, and it doesn't fit, it will cause the text to overflow.
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/*
+***************************************************
+*  7. Display images etc in a more intuitive way  *
+***************************************************
+    - Display default is inline weirdly
+    - 100% means auto resize based on parent
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+***************************************************************************
+*  8. Make form controls inherit typographical styles from their parents  *
+***************************************************************************
+    - Weirdly, they don't inherit by default
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+************************************
+*  9. Remove default list styling  *
+************************************
+*/
+ul,
+ol {
+  list-style: none;
+  padding-inline-start: 0px;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+/*
+**********************************************************
+*  10. If a user doesn't want motion, they won't get it  *
+**********************************************************
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

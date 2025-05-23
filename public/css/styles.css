@@ -1,0 +1,78 @@
+* {
+  font-family: arial;
+  color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    color: #fff;
+  }
+}
+
+body {
+  background-color: #fafafa;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0a0a0a;
+  }
+}
+
+h1 {
+  text-align: center;
+  margin-block: 2rem;
+}
+
+article {
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  display: flex;
+  gap: 2rem;
+  padding: 1rem;
+  align-items: center;
+  border: 1px solid gray;
+  margin-block-end: 1rem;
+  margin-inline: 1rem;
+}
+
+article:hover {
+  background-color: #f0f0f0;
+}
+
+@media (prefers-color-scheme: dark) {
+  article {
+    background-color: #000;
+  }
+  article:hover {
+    background-color: #0f0f0f;
+  }
+}
+
+.badge {
+  max-width: max-content;
+  max-height: max-content;
+  padding-inline: 0.25rem;
+  border: 1px solid black;
+  border-radius: 0.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .badge {
+    border-color: #fff;
+  }
+}
+
+.badge[data-urgency="high"] {
+  background-color: red;
+}
+.badge[data-urgency="medium"] {
+  background-color: yellow;
+}
+.badge[data-urgency="low"] {
+  background-color: green;
+}
+
+ul {
+  display: inline;
+}
