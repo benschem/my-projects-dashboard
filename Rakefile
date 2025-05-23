@@ -3,14 +3,14 @@
 namespace :data do
   desc 'Manually manage project data'
 
-  # rake middleware:list
+  # rake data:refresh
   task :refresh do
-    require 'dotenv/load'
-    require_relative './scripts/refresh_data'
+    require_relative 'config/environment'
+    require_relative './lib/github_client'
 
     puts 'Refreshing repo data from Github...'
 
-    call
+    GithubClient.call
 
     puts 'Done.'
   end
