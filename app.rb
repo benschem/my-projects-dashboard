@@ -11,6 +11,9 @@ require_relative 'projects/project_repository'
 class MyProjectsDashboard < Sinatra::Base
   configure do
     set :logger, LoggerSetup.build(settings.environment)
+
+    GithubClient.new(logger: settings.logger).fetch_repos_and_write_to_file
+
     set :project_repository, ProjectRepository.new(logger: settings.logger)
   end
 

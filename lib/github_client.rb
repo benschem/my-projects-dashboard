@@ -21,7 +21,7 @@ class GithubClient
 
   def initialize(attributes = {}) # rubocop:disable Metrics/MethodLength
     @logger = attributes[:logger] ||= Logger.new($stdout)
-    @output_file = attributes[:repos_file] || ENV['REPOS_FILE']
+    @output_file = attributes[:repos_file] || ENV['REPOS_DATA_FILE']
     # By default, Octokit does not timeout network requests
     # From docs - set a timeout in order to avoid Ruby’s Timeout module, which can kill your server
     Octokit.configure do |c|
@@ -37,9 +37,9 @@ class GithubClient
   end
 
   def fetch_repos_and_write_to_file
-    all_repo_data = fetch_repo_data
-    repos_with_languages = merge_languages(all_repo_data)
-    repos = simplify_repo_data(repos_with_languages)
+    repo_data = fetch_repo_data
+    repos_with_languages = merge_languages_and_simplify(repo_data)
+    repos = inset_total_lines(repos_with_languages)
 
     begin
       File.write(@output_file, JSON.pretty_generate(repos))
@@ -59,33 +59,24 @@ class GithubClient
     []
   end
 
-  def simplify_repo_data(repos)
-    repos.map do |repo|
-      {
-        name: repo.name,
-        full_name: repo.full_name,
-        url: repo.html_url,
-        description: repo.description
-      }
-    end
-  end
-
-  def merge_languages(repos) # rubocop:disable Metrics/MethodLength
+  def merge_languages_and_simplify(repos) # rubocop:disable Metrics/MethodLength
     Thread.report_on_exception = true if ENV['RACK_ENV'] != 'production'
 
     threads = repos.map do |repo|
       Thread.new do
-        repo[:languages] = fetch_languages(repo)
+        {
+          name: repo.name,
+          full_name: repo.full_name,
+          url: repo.html_url,
+          description: repo.description,
+          languages: fetch_languages(repo)
+        }
       end
     end
 
-    begin
-      threads.each(&:join)
-    rescue ThreadError => e
-      logger.error "Error joining threads while getting languages: #{e.message}"
-    end
-
-    repos
+    threads.map(&:value)
+  rescue ThreadError => e
+    logger.error "Error joining threads while getting languages: #{e.message}"
   end
 
   def fetch_languages(repo)
@@ -93,5 +84,11 @@ class GithubClient
   rescue Octokit::Error => e
     logger.error "Error fetching languages for #{repo[:full_name]}: #{e.message}"
     []
+  end
+
+  def inset_total_lines(repos)
+    repos.each do |repo|
+      repo[:total_lines] = repo[:languages].sum { |_, lines| lines }
+    end
   end
 end

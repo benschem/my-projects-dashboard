@@ -7,4 +7,4 @@
 
 # Ignore data
 data/repos.json
-data/metadata.json
+data/repos_metadata.json

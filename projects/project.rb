@@ -6,7 +6,7 @@ class Project
   URGENCY = %w[High Medium Low].freeze
   TYPE = %w[Personal Client Teaching Learning].freeze
 
-  attr_reader :id, :name, :full_name, :url, :description, :languages
+  attr_reader :id, :name, :full_name, :url, :description, :languages, :total_lines
   attr_accessor :status, :urgency, :type
 
   def initialize(attributes = {})
@@ -16,6 +16,7 @@ class Project
     @url = attributes[:url]
     @description = attributes[:description]
     @languages = attributes[:languages]
+    @total_lines = attributes[:total_lines]
     @status = attributes[:status]
     @urgency = attributes[:urgency]
     @type = attributes[:type]

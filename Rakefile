@@ -8,7 +8,7 @@ namespace :data do
     require_relative 'config/environment'
     require_relative './lib/github_client'
 
-    data_file = ENV['REPOS_FILE'] || 'data/repos.json'
+    data_file = ENV['REPOS_DATA_FILE'] || 'data/repos.json'
     file_last_updated = File.mtime(data_file)
 
     puts 'Refreshing repo data from Github...'
