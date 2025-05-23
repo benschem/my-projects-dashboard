@@ -11,18 +11,21 @@ require_relative 'projects/project_repository'
 class MyProjectsDashboard < Sinatra::Base
   configure do
     set :logger, LoggerSetup.build(settings.environment)
+    set :project_repository, ProjectRepository.new(logger: settings.logger)
   end
 
   helpers do
     def logger
       settings.logger
     end
+
+    def projects
+      settings.project_repository
+    end
   end
 
-  PROJECTS = ProjectRepository.new(logger: settings.logger)
-
   get '/' do
-    @projects = PROJECTS.all
+    @projects = projects.all
     erb :index
   end
 
