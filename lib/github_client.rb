@@ -69,6 +69,8 @@ class GithubClient
           full_name: repo.full_name,
           url: repo.html_url,
           description: repo.description,
+          created_at: repo.created_at,
+          pushed_at: repo.pushed_at,
           languages: fetch_languages(repo)
         }
       end
