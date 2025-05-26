@@ -35,7 +35,7 @@ class ProjectRepository
     return unless project
 
     project.status = attributes[:status]
-    project.urgency = attributes[:urgency]
+    project.priority = attributes[:priority]
     project.type = attributes[:type]
 
     save_metadata
@@ -44,7 +44,6 @@ class ProjectRepository
   private
 
   def load_projects
-    # TODO: Some kind of cache system so this can be updated without restarting
     repos = parse_json(@repos_data_file)
     repos_metadata = File.exist?(@metadata_file) ? parse_json(@metadata_file) : []
 
@@ -62,7 +61,7 @@ class ProjectRepository
   end
 
   def build_project(repo, metadata)
-    %i[status urgency type].each do |key|
+    %i[status priority type motivation].each do |key|
       repo[key] = metadata&.dig(key)
     end
 
@@ -71,14 +70,20 @@ class ProjectRepository
 
   def find_metadata(repo, repos_metadata)
     metadata = repos_metadata.find { |metadata| metadata[:full_name] == repo[:full_name] }
-    logger.warn "No metadata exists for #{repo[:full_name]}" if metadata.nil?
+    logger.warn "Metadata missing for #{repo[:full_name]} - only expected on first launch" if metadata.nil?
 
     metadata
   end
 
-  def write_metadata_to_file
+  def write_metadata_to_file # rubocop:disable Metrics/MethodLength
     metadata = @projects.map do |project|
-      { full_name: project.full_name, status: project.status, urgency: project.urgency, type: project.type }
+      {
+        full_name: project.full_name,
+        status: project.status,
+        priority: project.priority,
+        type: project.type,
+        motivation: project.motivation
+      }
     end
 
     begin

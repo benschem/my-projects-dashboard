@@ -4,15 +4,15 @@ require 'date'
 
 # Project
 class Project
-  STATUSES = %w[Development Production Archived].freeze
-  URGENCY = %w[High Medium Low].freeze
-  TYPE = %w[Personal Client Teaching Learning].freeze
+  STATUSES = %w[planning development paused live archived abandoned].freeze
+  PRIORITY = %w[high medium low].freeze
+  TYPE = %w[personal client teaching learning other].freeze
+  MOTIVATION = %w[high medium low blocked dread].freeze
 
   attr_reader :id, :name, :full_name, :url, :description, :languages, :total_lines, :created_at, :pushed_at
-  attr_accessor :status, :urgency, :type
+  attr_accessor :status, :priority, :type
 
   def initialize(attributes = {}) # rubocop:disable Metrics/MethodLength
-    @id = attributes[:id]
     @name = attributes[:name]
     @full_name = attributes[:full_name]
     @url = attributes[:url]
@@ -22,8 +22,9 @@ class Project
     @languages = attributes[:languages]
     @total_lines = attributes[:total_lines]
     @status = attributes[:status]
-    @urgency = attributes[:urgency]
+    @priority = attributes[:priority]
     @type = attributes[:type]
+    @motivation = attributes[:motivation]
   end
 
   def created_ago
