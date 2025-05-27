@@ -25,9 +25,16 @@
 ### Views and UI
 
 [X] Index page
-[ ] Nice styling
-[ ] Filter
-[ ] Search
+[X] Nice styling
+[X] Filter
+[X] Search
+
+## Update for Projects
+
+[X] Update method in project repo
+[ ] Edit route
+[ ] Update route
+[ ] Edit view with form
 
 ## Deployment
 
@@ -39,6 +46,8 @@
 
 ## Polish
 
+[ ] No page refresh to show and submit edit forms
+[ ] No page refresh for filter checkboxes
 [X] Add error handling
 [X] If API rate limit hit or invalid response, log and skip
 [X] Ensure missing data doesn’t break UI
