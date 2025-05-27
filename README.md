@@ -5,13 +5,15 @@ A super simple dashboard that pulls data about all my GitHub repositories and pr
 ## Features
 
 - Lists all repositories from a GitHub user account
-- Displays:
+- Display, sort and filter your projects by:
   - Repo name, description, URL
   - Languages used
-  - Creation and last updated dates
-  - Active branches
-  - README and TODO files (if present)
-- Uses cached JSON to avoid hitting the API too often
+  - Creation and last pushed dates
+  - Priority
+  - Status
+  - Your motivation to work on it
+  - Type of project
+- Uses JSON for data storage
 - Basic auth for private use only
 
 ## Architecture
@@ -22,8 +24,8 @@ Built to be lightweight and maintainable:
 - [Rack](https://github.com/rack/rack)
 - `Rack::Auth::Basic`
 - ERB templates
-- GitHub REST API v3
-- JSON for cached data — no database complexity
+- GitHub REST API v3 - fetch data about your repos from GitHub
+- JSON for data storage — no database complexity
 
 ## Setup
 
@@ -51,7 +53,13 @@ Add your Github username and token.
 ### Running the app
 
 ```bash
-rackup config.ru
+rackup
+```
+
+For for hot reloading of the whole app in development, use
+
+```bash
+rerun -- rackup
 ```
 
 By default, the app runs on http://localhost:9292

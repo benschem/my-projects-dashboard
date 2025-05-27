@@ -8,3 +8,9 @@
 # Ignore data
 data/repos.json
 data/repos_metadata.json
+
+# Ignore application logs
+logs/
+
+# Ignore temporay puma files
+tmp/

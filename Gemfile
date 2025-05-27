@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'puma'
 gem 'rack'
 gem 'sinatra'
 
@@ -10,6 +11,7 @@ gem 'json'
 gem 'octokit'
 
 group :development do
-  gem 'debug', require: false
+  gem 'debug'
+  gem 'rerun', require: false
   gem 'rubocop', require: false
 end
