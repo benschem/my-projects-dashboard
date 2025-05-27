@@ -1,31 +1,199 @@
-<h1>My Projects</h1>
+<h1 class="title is-2">My Projects</h1>
+<section class="container">
 
-<% @projects.each do |project| %>
-  <article>
-    <div class="badge" data-urgency="<%= project.urgency %>">
-      <%= project.urgency %> priority
-    </div>
+  <div class="box">
+    <form action="/" method="GET">
+      <div class="columns is-multiline">
 
-      <div>
-        <h2><%= project.name %></h2>
-        <p><%= project.description %></p>
-        <a href="<%= project.url %>" target="_blank">View on Github</a>
+
+        <!-- Priority Filters -->
+        <div class="column is-one-quarter">
+          <h3 class="title is-6">Priority</h3>
+          <% Project::PRIORITIES.each do |priority| %>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" name="priority[]" value="<%= priority %>" <%= 'checked' if params[:priority]&.include?(priority) %>>
+                <%= priority.capitalize %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Motivation Filters -->
+        <div class="column is-one-quarter">
+          <h3 class="title is-6">Motivation</h3>
+          <% Project::MOTIVATION.each do |motivation| %>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" name="motivation[]" value="<%= motivation %>" <%= 'checked' if params[:motivation]&.include?(motivation) %>>
+                <%= motivation.capitalize %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Status Filters -->
+        <div class="column is-one-quarter">
+          <h3 class="title is-6">Status</h3>
+          <% Project::STATUSES.each do |status| %>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" name="status[]" value="<%= status %>" <%= 'checked' if params[:status]&.include?(status) %>>
+                <%= status.capitalize %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Type Filters -->
+        <div class="column is-one-quarter">
+          <h3 class="title is-6">Type</h3>
+          <% Project::TYPE.each do |type| %>
+            <div class="field">
+              <label class="checkbox">
+                <input type="checkbox" name="type[]" value="<%= type %>" <%= 'checked' if params[:type]&.include?(type) %>>
+                <%= type.capitalize %>
+              </label>
+            </div>
+          <% end %>
+        </div>
+
+
       </div>
 
-      <div>
-        <p><strong>Created:</strong> <%= Time.new(project.created_at).strftime('%B %Y') %></p>
-        <p><strong>Last pushed:</strong> <%= project.pushed_ago %> <%= project.pushed_ago == 1 ? 'day' : 'days' %> ago</p>
+      <div class="field is-grouped is-grouped-right mt-4">
+        <div class="control">
+          <button
+            class="button is-danger"
+            type="button"
+            onclick="clearAndSubmit(this.form)">
+            Clear Filters
+          </button>
+          <script>
+            function clearAndSubmit(form) {
+              const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+              checkboxes.forEach(cb => cb.checked = false);
+              form.submit();
+            }
+          </script>
+          <button class="button is-primary" type="submit">Filter</button>
+        </div>
       </div>
+    </form>
+  </div>
+</section>
 
-      <div>
-        <p><strong>Status</strong>: <%= project.status %></p>
-        <p><strong>Type:</strong> <%= project.type %></p>
-      </div >
+<div class="container my-4">
+  <p class="subtitle is-6"><%= @projects&.count || 0 %> <%= @projects&.count == 1 ? "result" : "results" %>...</p>
+</div>
 
-    <ul>
-      <% project.languages.first(3)&.each do |language| %>
-        <li><strong><%= language[0] %>:</strong> <%= (language[1].fdiv(project.total_lines) * 100).round %>%</li>
+<section class="container">
+  <div class="box">
+
+    <table class="table is-striped is-hoverable">
+      <thead>
+        <tr>
+          <th nowrap scope="col">
+            <a href="/?sort=priority&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Priority
+              <% if params[:sort] == 'priority' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=motivation&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Motivation
+              <% if params[:sort] == 'motivation' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=name&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Project
+              <% if params[:sort] == 'name' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=status&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Status
+              <% if params[:sort] == 'status' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=priority&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Type
+              <% if params[:sort] == 'priority' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=created_at&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Date Created
+              <% if params[:sort] == 'created_at' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">
+            <a href="/?sort=pushed_at&direction=<%= params[:direction] == 'desc' ? 'asc' : 'desc' %>">
+              Last Push
+              <% if params[:sort] == 'pushed_at' %>
+                <%= params[:direction] == 'desc' ? '↓' : '↑' %>
+              <% end %>
+            </a>
+          </th>
+          <th nowrap scope="col">View</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @projects&.each do |project| %>
+          <tr>
+            <td nowrap data-priority="<%= project.priority %>"><%= project.priority == 'none' ? '' : project.priority&.capitalize %></td>
+            <td nowrap data-motivation="<%= project.motivation %>"><%= project.motivation == 'finished' ? 'Done' : project.motivation&.capitalize %></td>
+            <td>
+              <div>
+                <h2 class="title is-4">
+                  <%= project.name %>
+                  <% if project.status == 'live' %>
+                    <div class='tag is-warning'>
+                      <%= project.status&.capitalize %>
+                    </div>
+                  <% end %>
+                </h2>
+                <p class="subtitle is-6"><%= project.description %></p>
+                <ul class="field is-grouped is-grouped-multiline">
+                  <% project.languages&.first(4).each do |language, lines| %>
+                    <li class="control">
+                      <div class="tags has-addons">
+                        <span class="tag is-dark"><%= language %>:</span>
+                        <span class="tag is-info"><%= (lines.fdiv(project.total_lines) * 100).round %>%</span>
+                      </div>
+                    </li>
+                  <% end %>
+                </ul>
+              </div>
+            </td>
+            <td nowrap><%= project.status&.capitalize %></td>
+            <td nowrap data-type="<%= project.type %>"><%= project.type&.capitalize %></td>
+            <td nowrap><%= Time.new(project.created_at).strftime('%b %Y') %></td>
+            <td nowrap><%= project.pushed_ago %> <%= project.pushed_ago == 1 ? 'day' : 'days' %> ago</td>
+            <td nowrap>
+              <a class="is-link" href="<%= project.url %>" target="_blank">
+                <span class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </span>
+              </a>
+            </td>
+          </tr>
       <% end %>
-    </ul>
-  </article>
-<% end %>
+      </tbody>
+    </table>
+  </div>
+</section>
