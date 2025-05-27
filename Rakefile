@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-namespace :data do
+namespace :repos do
   desc 'Manually manage project data'
 
-  # rake data:refresh
-  task :refresh do
+  # rake repos:refresh
+  task :to_json do
     require_relative 'config/environment'
-    require_relative './lib/github'
+    require_relative './lib/github_repo_exporter'
 
     data_file = ENV['REPOS_DATA_FILE'] || 'data/repos.json'
     file_last_updated = File.mtime(data_file)
 
-    puts 'Refreshing repo data from Github...'
+    puts 'Pulling repo data from Github API...'
 
-    Github.new.repos_to_file
+    GithubRepoExporter.new.repos_to_file
 
     if file_last_updated == File.mtime(data_file)
-      puts 'Unable to update repo data.'
+      puts 'Error: file was not written to: `/data/repos.json`'
     else
-      puts 'Updated repo data.'
+      puts 'Written GitHub repo data to file: `/data/repos.json`'
     end
   end
 end
