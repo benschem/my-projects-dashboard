@@ -4,13 +4,20 @@ require 'date'
 
 # Project
 class Project
-  STATUSES = %w[planning development paused live archived abandoned].freeze
-  PRIORITY = %w[high medium low].freeze
-  TYPE = %w[personal client teaching learning other].freeze
-  MOTIVATION = %w[high medium low blocked dread].freeze
+  PRIORITIES = %w[high medium low done none].freeze
+  MOTIVATION = %w[hot warm cold finished blocked dread].freeze
+  STATUSES = %w[live development planning paused archived abandoned].freeze
+  TYPE = %w[client teaching job learning personal].freeze
+
+  PRIORITY_ORDER = PRIORITIES.each_with_index.to_h.freeze
+  MOTIVATION_ORDER = MOTIVATION.each_with_index.to_h.freeze
+  STATUS_ORDER = STATUSES.each_with_index.to_h.freeze
+  TYPE_ORDER = TYPE.each_with_index.to_h.freeze
+
+  SORTS = %w[name status priority type motivation created_at pushed_at].freeze
 
   attr_reader :id, :name, :full_name, :url, :description, :languages, :total_lines, :created_at, :pushed_at
-  attr_accessor :status, :priority, :type
+  attr_accessor :status, :priority, :type, :motivation
 
   def initialize(attributes = {}) # rubocop:disable Metrics/MethodLength
     @name = attributes[:name]

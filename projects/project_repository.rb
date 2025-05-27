@@ -17,7 +17,7 @@ class ProjectRepository
   end
 
   def all
-    logger.error('Unable to retrieve projects') if @projects.empty?
+    logger.warn('Unable to retrieve projects') if @projects.empty?
 
     @projects
   end
@@ -38,7 +38,7 @@ class ProjectRepository
     project.priority = attributes[:priority]
     project.type = attributes[:type]
 
-    save_metadata
+    write_metadata_to_file
   end
 
   private
@@ -58,6 +58,9 @@ class ProjectRepository
 
   def parse_json(file)
     JSON.parse(File.read(file), symbolize_names: true)
+  rescue JSON::ParserError => e
+    logger.error("Failed to parse #{file}: #{e.message}")
+    []
   end
 
   def build_project(repo, metadata)

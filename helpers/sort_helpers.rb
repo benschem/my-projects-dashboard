@@ -21,14 +21,14 @@ module SortHelpers # rubocop:disable Style/Documentation
     param == 'desc' ? 'desc' : 'asc'
   end
 
-  def sort_projects(projects, sort_param) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength
+  def sort_projects(projects, sort_param) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/AbcSize
     projects.sort_by! do |project|
       case sort_param
       when 'name'       then project.name
-      when 'status'     then project.status
-      when 'priority'   then project.priority
-      when 'type'       then project.type
-      when 'motivation' then project.motivation
+      when 'status'     then Project::STATUS_ORDER[project.status] || 999
+      when 'priority'   then Project::PRIORITY_ORDER[project.priority] || 999
+      when 'type'       then Project::TYPE_ORDER[project.type] || 999
+      when 'motivation' then Project::MOTIVATION_ORDER[project.motivation] || 999
       when 'created_at' then time(project.created_at)
       when 'pushed_at'  then time(project.pushed_at)
       end
